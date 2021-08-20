@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }
+
+        @media (max-width: 767px) {
+            .markdown-body {
+                padding: 15px;
+            }
+        }
+    </style>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <title>md文档内容转成html显示</title>
+</head>
+<body>
+<div id="content" class="container markdown-body"></div>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/marked/marked.min.js'></script>
+<script type="text/javascript">
+    window.onload = function () {
+        let url = getQueryVariable('url')
+        if (!url) {
+            url = 'https://raw.githubusercontent.com/seemarkdown/seemarkdown/main/README.md'
+        }
+        showMarkdown(url)
+    }
+
+    function getQueryVariable(variable) {
+        let query = window.location.search.substring(1);
+        let vars = query.split("&");
+        for (let i = 0; i < vars.length; i++) {
+            let pair = vars[i].split("=");
+            if (pair[0] === variable) {
+                return pair[1];
+            }
+        }
+        return false;
+    }
+
+    function showMarkdown(url) {
+        let xmlHttp;
+        if (window.XMLHttpRequest) {
+            xmlHttp = new XMLHttpRequest();
+        } else {
+            xmlHttp = new ActiveXObject('Microsoft.XMLHttp');
+        }
+        xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                document.getElementById('content').innerHTML = marked(xmlHttp.responseText);
+            }
+        }
+        xmlHttp.open('GET', url, true);
+        xmlHttp.send();
+    }
+</script>
+</body>
+</html>
+
